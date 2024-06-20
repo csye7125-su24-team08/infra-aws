@@ -5,7 +5,7 @@ variable "region" {
 
 variable "profile" {
   type    = string
-  default = "infra"
+  default = "dev"
 }
 
 variable "vpc_cidr" {
