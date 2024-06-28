@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  tools {
+    nodejs 'node'
+  }
   environment {
     GITHUB_CREDENTIALS = credentials('GITHUB_CREDENTIALS') 
   }
@@ -9,6 +12,16 @@ pipeline {
       steps {
         cleanWs()
         checkout scm
+      }
+    }
+    stage('Validate Conventional Commits') {
+      steps {
+        sh '''
+        echo "Validate commit messages"
+
+        npm i -D @semantic-release/commit-analyzer @semantic-release/exec @semantic-release/git @semantic-release/github
+        npx semantic-release --dry-run
+        '''
       }
     }
     stage('Validate Terraform') {

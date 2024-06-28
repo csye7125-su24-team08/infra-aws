@@ -67,13 +67,9 @@ module "eks" {
 
       instance_types = ["c3.large"]
 
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
-
-      update_config = {
-        max_unavailable = 1
-      }
+      min_size     = var.eks_cluster_min_size 
+      max_size     = var.eks_cluster_max_size
+      desired_size = 3
 
       launch_template = {
         id      = aws_launch_template.my_launch_template.id
