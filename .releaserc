@@ -1,0 +1,14 @@
+{
+  "branches": [
+    "main"
+  ],
+  "repositoryUrl": "https://github.com/csye7125-su24-team08/infra-aws.git",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+  ],
+  "release": {
+    "analyzeCommits": [
+      "@semantic-release/commit-analyzer"
+    ]
+  }
+}

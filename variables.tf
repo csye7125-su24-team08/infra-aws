@@ -52,3 +52,23 @@ variable "PRIVATE_SUBNETS" {
   type    = list(string)
   default = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
 }
+
+variable "eks_cluster_min_size" {
+  type    = number
+  default = 3
+}
+
+variable "eks_cluster_max_size" {
+  type    = number
+  default = 6
+}
+
+variable "eks_cluster_desired_capacity" {
+  type    = number
+  default = 3
+}
+
+variable "postgresUser" {
+  type    = string
+  default = "piyush"
+}

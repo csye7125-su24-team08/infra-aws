@@ -1,0 +1,21 @@
+
+enabled: true
+image:
+  tag: 15.5.0-debian-11-r5
+auth:
+  enablePostgresUser: true 
+  database: cve
+primary:
+  persistence:
+    size: 1Gi
+  labels:
+    app: webapp-db
+  podLabels:
+    app: webapp-db
+  resources:
+    limits:
+      memory: "768Mi"
+      cpu: "0.5"
+    requests:
+      memory: "128Mi"
+      cpu: "0.5"

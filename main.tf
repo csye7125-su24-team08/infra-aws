@@ -5,6 +5,16 @@ terraform {
       version = "~> 5.0"
     }
 
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.11.0"
+    }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.24.0"
+    }
+
     random = {
       source  = "hashicorp/random"
       version = "~> 3.6.1"
@@ -19,6 +29,28 @@ terraform {
       source  = "hashicorp/cloudinit"
       version = "~> 2.3.4"
     }
+  }
+}
+
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_name
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = data.aws_eks_cluster.cluster.name
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
   }
 }
 

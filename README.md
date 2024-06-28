@@ -23,6 +23,27 @@ To set up the EKS cluster, follow these steps:
 7. Wait for the resources to be provisioned. This may take a few minutes.
 8. Once the cluster is up and running, you can access it using the AWS CLI or Kubernetes tools.
 
+## Deploying Kafka and PostgreSQL
+
+To deploy Kafka and PostgreSQL using Terraform, follow these steps:
+
+1. Make sure you have the `kafka-values.yaml` and `postgres-values.yaml` files available in the `infra-aws` directory.
+
+2. Open the `kafka-values.yaml` file and update the desired configurations for Kafka. This file contains the settings for topics, partitions, replication factor, and other Kafka-specific configurations.
+
+3. Open the `postgres-values.yaml` file and update the desired configurations for PostgreSQL. This file contains the settings for database name, username, password, and other PostgreSQL-specific configurations.
+
+4. Run `terraform apply` to create the Kafka and PostgreSQL resources based on the updated configurations in the YAML files.
+
+5. Wait for the resources to be provisioned. This may take a few minutes.
+
+6. Once the deployment is complete, you can access Kafka and PostgreSQL using the appropriate connection details specified in the YAML files.
+
+Remember to update the YAML files whenever you need to change the configurations for Kafka and PostgreSQL.
+
+For more information on deploying Kafka and PostgreSQL with Terraform, refer to the documentation provided for each service.
+
+
 ## Additional Resources
 
 For more information on Terraform and EKS, refer to the following resources:
