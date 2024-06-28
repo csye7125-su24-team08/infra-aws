@@ -15,6 +15,11 @@ pipeline {
       }
     }
     stage('Validate Conventional Commits') {
+      when {
+        not {
+          branch 'main'
+        }
+      }
       steps {
         sh '''
         echo "Validate commit messages"
