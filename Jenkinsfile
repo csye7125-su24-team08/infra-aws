@@ -19,7 +19,7 @@ pipeline {
         sh '''
         echo "Validate commit messages"
 
-        npm i -D @semantic-release/commit-analyzer @semantic-release/exec @semantic-release/git @semantic-release/github
+        npm i -D @semantic-release/commit-analyzer 
         npx semantic-release --dry-run
         '''
       }

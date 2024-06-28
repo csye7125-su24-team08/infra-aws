@@ -12,9 +12,9 @@ resource "helm_release" "postgresql" {
 
 
   create_namespace = true
-  namespace = "cve-consumer"
+  namespace        = "cve-consumer"
 
-  values           = ["${file("postgres-values.yaml")}"]
+  values = ["${file("postgres-values.yaml")}"]
 
   set {
     name  = "auth.username"

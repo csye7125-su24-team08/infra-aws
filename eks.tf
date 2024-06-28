@@ -67,7 +67,7 @@ module "eks" {
 
       instance_types = ["c3.large"]
 
-      min_size     = var.eks_cluster_min_size 
+      min_size     = var.eks_cluster_min_size
       max_size     = var.eks_cluster_max_size
       desired_size = 3
 

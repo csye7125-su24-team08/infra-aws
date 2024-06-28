@@ -7,9 +7,9 @@ resource "helm_release" "kafka" {
   name       = "webapp-kafka"
 
   create_namespace = true
-  namespace = "kafka-ns"
+  namespace        = "kafka-ns"
 
-  values           = ["${file("kafka-values.yaml")}"]
+  values = ["${file("kafka-values.yaml")}"]
 
   set {
     name  = "replicaCount"

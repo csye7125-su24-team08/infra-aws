@@ -5,29 +5,10 @@
   "repositoryUrl": "https://github.com/csye7125-su24-team08/infra-aws.git",
   "plugins": [
     "@semantic-release/commit-analyzer",
-    [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "helm package ."
-      }
-    ],
-    [
-      "@semantic-release/github",
-      {
-        "successComment": false,
-        "failComment": false
-      }
-    ]
   ],
   "release": {
-    "verifyConditions": {
-      "path": [
-        "@semantic-release/github"
-      ]
-    },
     "analyzeCommits": [
       "@semantic-release/commit-analyzer"
-    ],
-    "publish": "@semantic-release/github"
+    ]
   }
 }
