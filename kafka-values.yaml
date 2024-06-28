@@ -1,12 +1,12 @@
 listeners:
   client:
-    protocol: SASL_PLAINTEXT
+    protocol: PLAINTEXT
   controller:
-    protocol: SASL_PLAINTEXT
+    protocol: PLAINTEXT
   interbroker:
-    protocol: SASL_PLAINTEXT
+    protocol: PLAINTEXT
   external:
-    protocol: SASL_PLAINTEXT
+    protocol: PLAINTEXT
 
 controller:
   replicaCount: 0
