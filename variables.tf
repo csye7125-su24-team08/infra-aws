@@ -72,3 +72,8 @@ variable "postgresUser" {
   type    = string
   default = "piyush"
 }
+
+variable "autoscaler_repo" {
+  type    = string
+  default = "/Users/piyushdongre/csye7125/helm-eks-autoscaler/helm-eks-autoscaler-0.1.0.tgz"
+}
