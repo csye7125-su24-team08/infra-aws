@@ -50,6 +50,9 @@ module "eks" {
     eks-pod-identity-agent = {
       service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
     }
+    vpc-cni = {
+      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+    }
   }
 
   cluster_enabled_log_types = ["scheduler", "controllerManager", "api", "audit", "authenticator"]
@@ -69,7 +72,7 @@ module "eks" {
 
       min_size     = var.eks_cluster_min_size
       max_size     = var.eks_cluster_max_size
-      desired_size = 3
+      desired_size = var.eks_cluster_desired_capacity
 
       launch_template = {
         id      = aws_launch_template.my_launch_template.id

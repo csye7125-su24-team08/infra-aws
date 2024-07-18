@@ -68,7 +68,7 @@ resource "aws_iam_role_policy_attachment" "auto_scaler_policy_attachment" {
 resource "helm_release" "eks-autoscaler" {
   depends_on = [module.eks]
 
-  chart   = "/Users/piyushdongre/csye7125/helm-eks-autoscaler"
+  chart   = var.autoscaler_repo
   version = "9.37.0"
   name    = "eks-autoscaler"
 
