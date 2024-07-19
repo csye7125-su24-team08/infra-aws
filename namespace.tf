@@ -31,7 +31,7 @@ resource "kubernetes_namespace" "cve_processor_ns" {
     name = "cve-processor"
   }
 
-  depends_on = [ helm_release.kafka ]
+  depends_on = [helm_release.kafka]
 }
 
 resource "kubernetes_limit_range" "cve_processor_limit_range" {
