@@ -50,9 +50,9 @@ module "eks" {
     eks-pod-identity-agent = {
       service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
     }
-    vpc-cni = {
-      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
-    }
+    # vpc-cni = {
+    #   service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+    # }
   }
 
   cluster_enabled_log_types = ["scheduler", "controllerManager", "api", "audit", "authenticator"]

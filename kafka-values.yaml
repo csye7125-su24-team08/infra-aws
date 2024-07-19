@@ -22,11 +22,11 @@ broker:
     size: 20Gi
   resources:
     limits:
-      memory: "4Gi"
-      cpu: "2"
-    requests:
       memory: "2Gi"
-      cpu: "1"
+      cpu: "1.5"
+    requests:
+      memory: "1Gi"
+      cpu: "0.5"
 
 serviceAccount:
   create: false
