@@ -75,5 +75,5 @@ variable "postgresUser" {
 
 variable "autoscaler_repo" {
   type    = string
-  default = "./helm-eks-autoscaler"
+  default = "../helm-eks-autoscaler"
 }
