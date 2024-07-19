@@ -38,7 +38,7 @@ module "eks" {
   version = "20.8.5"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.29"
+  cluster_version = "1.30"
 
   cluster_endpoint_public_access           = true
   enable_cluster_creator_admin_permissions = true
@@ -50,9 +50,14 @@ module "eks" {
     eks-pod-identity-agent = {
       service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
     }
-    # vpc-cni = {
-    #   service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
-    # }
+    kube-proxy = {
+      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+      version                  = "v1.29.3-eksbuild.5"
+    }
+    vpc-cni = {
+      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+      version                  = "v1.18.2-eksbuild.1"
+    }
   }
 
   cluster_enabled_log_types = ["scheduler", "controllerManager", "api", "audit", "authenticator"]
