@@ -7,16 +7,16 @@ resource "kubernetes_limit_range" "kafka_ns_limit_range" {
     limit {
       type = "Container"
       default = {
-        cpu    = "600m"
-        memory = "900Mi"
+        cpu    = var.kafka_def_lim_cpu
+        memory = var.kafka_def_lim_mem
       }
       default_request = {
-        cpu    = "300m"
-        memory = "300Mi"
+        cpu    = var.kafka_def_req_cpu
+        memory = var.kafka_def_req_mem
       }
     }
   }
-  
+
   depends_on = [helm_release.kafka]
 }
 
@@ -43,12 +43,12 @@ resource "kubernetes_limit_range" "cve_processor_limit_range" {
     limit {
       type = "Container"
       default = {
-        cpu    = "200m"
-        memory = "300Mi"
+        cpu    = var.cont_def_lim_cpu
+        memory = var.cont_def_lim_mem
       }
       default_request = {
-        cpu    = "100m"
-        memory = "200Mi"
+        cpu    = var.cont_def_req_cpu
+        memory = var.cont_def_req_mem
       }
     }
   }
@@ -65,12 +65,12 @@ resource "kubernetes_limit_range" "cve_consumer_limit_range" {
     limit {
       type = "Container"
       default = {
-        cpu    = "200m"
-        memory = "300Mi"
+        cpu    = var.cont_def_lim_cpu
+        memory = var.cont_def_lim_mem
       }
       default_request = {
-        cpu    = "100m"
-        memory = "200Mi"
+        cpu    = var.cont_def_req_cpu
+        memory = var.cont_def_req_mem
       }
     }
   }
