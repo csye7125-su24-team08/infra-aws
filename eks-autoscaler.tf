@@ -68,11 +68,11 @@ resource "aws_iam_role_policy_attachment" "auto_scaler_policy_attachment" {
 resource "helm_release" "eks-autoscaler" {
   depends_on = [module.eks]
 
-  name                = "eks-autoscaler"
-  repository          = "git+https://github.com/csye7125-su24-team08/helm-eks-autoscaler.git"
-  chart               = "helm-eks-autoscaler" # Relative path to the chart directory in the repo
-  version             = "0.1.0"               # Specify the version of the Helm chart
-  
+  name       = "eks-autoscaler"
+  repository = "git+https://github.com/csye7125-su24-team08/helm-eks-autoscaler.git"
+  chart      = "helm-eks-autoscaler" # Relative path to the chart directory in the repo
+  version    = "0.1.0"               # Specify the version of the Helm chart
+
   repository_username = "dongrep"
   repository_password = var.github_token
 
