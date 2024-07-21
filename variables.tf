@@ -117,3 +117,10 @@ variable "cont_def_lim_mem" {
   type    = string
   default = "300Mi"
 }
+
+variable "github_token" {
+  type        = string
+  description = "GitHub Personal Access Token"
+  sensitive   = true
+  default     = "use-gh-pat-token"
+}

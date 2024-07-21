@@ -15,7 +15,7 @@ resource "aws_launch_template" "my_launch_template" {
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
-      volume_size           = 20
+      volume_size           = 40
       volume_type           = "gp2"
       delete_on_termination = true
       encrypted             = true
@@ -50,13 +50,15 @@ module "eks" {
     eks-pod-identity-agent = {
       service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
     }
-    kube-proxy = {
-      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
-      version                  = "v1.29.3-eksbuild.5"
-    }
     vpc-cni = {
-      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
-      version                  = "v1.18.2-eksbuild.1"
+      most_recent          = true
+      configuration_values = jsonencode({ "enableNetworkPolicy" : "true" })
+    }
+    kube-proxy = {
+      most_recent = true
+    }
+    coredns = {
+      most_recent = true
     }
   }
 
