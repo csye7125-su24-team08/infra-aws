@@ -13,13 +13,14 @@ controller:
   
 broker:
   configOverrides:
-        server:
-          properties:
-            message.max.bytes: 2024000   
-            replica.fetch.max.bytes: 2024000 
+    server:
+      properties:
+        message.max.bytes: 2024000   
+        replica.fetch.max.bytes: 2024000 
   replicaCount: 3 
   persistence:
     size: 20Gi
+    storageClass: "gp2"
   resources:
     limits:
       memory: "2Gi"
@@ -44,6 +45,7 @@ kraft:
 zookeeper:
   enabled: true
   persistence:
+    storageClass: "gp2"
     size: 2Gi
 
 extraEnvVars:

@@ -70,3 +70,32 @@ Make sure to replace `$(terraform output -raw region)` with the actual region ou
 Now you can use Kubernetes tools or the AWS CLI to interact with the EKS cluster.
 
 For more information on managing EKS clusters, refer to the [AWS EKS Documentation](https://aws.amazon.com/eks/).
+
+## Installing Git Plugin for Helm
+
+Before you can install `eks-autoscaler` from a private Git repository using Helm, you need to install the Git plugin for Helm. Follow these steps to install the Git plugin:
+
+1. Open your terminal or command prompt.
+2. Run the following command to add the Helm stable repository:
+
+  ```bash
+  helm repo add stable https://charts.helm.sh/stable
+  ```
+
+3. Run the following command to update the Helm repositories:
+
+  ```bash
+  helm repo update
+  ```
+
+4. Run the following command to install the Git plugin for Helm:
+
+  ```bash
+  helm plugin install https://github.com/aslafy-z/helm-git.git
+  ```
+
+  This will install the Git plugin for Helm, allowing you to install charts from private Git repositories.
+
+Once you have installed the Git plugin for Helm, you can proceed with installing `eks-autoscaler` from your private Git repository.
+
+For more information on using Helm with private Git repositories, refer to the [Helm documentation](https://helm.sh/docs/).
