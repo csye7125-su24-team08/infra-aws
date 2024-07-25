@@ -1,3 +1,17 @@
+resource "kubernetes_namespace" "cve-operator" {
+  metadata {
+    annotations = {
+      name = "cve-operator"
+    }
+    labels = {
+      name = "cve-operator"
+    }
+    name = "cve-operator"
+  }
+
+  depends_on = [module.eks]
+}
+
 resource "kubernetes_limit_range" "kafka_ns_limit_range" {
   metadata {
     name      = "kafka-ns-limit-range"
