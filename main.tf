@@ -7,8 +7,9 @@ module "postgres_chart" {
 }
 
 module "kafka_chart" {
-  source           = "./kafka"
-  eks_cluster_name = module.eks.cluster_name
+  source                     = "./kafka"
+  eks_cluster_name           = module.eks.cluster_name
+  serviceMonitoringNamespace = var.serviceMonitorNamespace
 }
 
 module "cve-operator_chart" {
@@ -39,8 +40,7 @@ module "cve-consumer_chart" {
   dockerCreds      = var.dockerCreds
   postgresPassword = module.postgres_chart.postgresPassword
   postgresUser     = var.postgresUser
-
-  depends_on = [module.eks, module.postgres_chart]
+  depends_on       = [module.eks, module.postgres_chart]
 }
 
 module "namespace-config" {
