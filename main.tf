@@ -1,60 +1,63 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-
-    helm = {
-      source  = "hashicorp/helm"
-      version = "2.11.0"
-    }
-
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.24.0"
-    }
-
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.6.1"
-    }
-
-    tls = {
-      source  = "hashicorp/tls"
-      version = "~> 4.0.5"
-    }
-
-    cloudinit = {
-      source  = "hashicorp/cloudinit"
-      version = "~> 2.3.4"
-    }
-  }
+module "postgres_chart" {
+  source                = "./postgres"
+  postgresUser          = var.postgresUser
+  region                = var.region
+  eks_cluster_name      = module.eks.cluster_name
+  eks_instance_role_arn = aws_iam_role.eks_instance_role.arn
 }
 
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_name
+module "kafka_chart" {
+  source                     = "./kafka"
+  eks_cluster_name           = module.eks.cluster_name
+  serviceMonitoringNamespace = var.serviceMonitorNamespace
 }
 
-data "aws_eks_cluster_auth" "cluster" {
-  name = data.aws_eks_cluster.cluster.name
+module "cve-operator_chart" {
+  source           = "./cve-operator"
+  eks_cluster_name = module.eks.cluster_name
+  dockerCreds      = var.dockerCreds
 }
 
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
+module "node-autoscaler_chart" {
+  source            = "./node-autoscaler"
+  region            = var.region
+  eks_cluster_name  = module.eks.cluster_name
+  eks_oidc_provider = module.eks.oidc_provider
+  depends_on        = [module.eks]
 }
 
-provider "helm" {
-  kubernetes {
-    host                   = data.aws_eks_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
-    token                  = data.aws_eks_cluster_auth.cluster.token
-  }
+module "fluent-bit_chart" {
+  source            = "./fluent-bit"
+  region            = var.region
+  eks_cluster_name  = module.eks.cluster_name
+  eks_oidc_provider = module.eks.oidc_provider
+  depends_on        = [module.eks]
 }
 
-provider "aws" {
-  region  = var.region
-  profile = var.profile
+module "cve-consumer_chart" {
+  source           = "./cve-consumer"
+  eks_cluster_name = module.eks.cluster_name
+  dockerCreds      = var.dockerCreds
+  postgresPassword = module.postgres_chart.postgresPassword
+  postgresUser     = var.postgresUser
+  depends_on       = [module.eks, module.postgres_chart]
+}
+
+module "namespace-config" {
+  source                = "./namespace-config"
+  postgresUser          = var.postgresUser
+  region                = var.region
+  eks_cluster_name      = module.eks.cluster_name
+  eks_oidc_provider     = module.eks.oidc_provider
+  eks_instance_role_arn = aws_iam_role.eks_instance_role.arn
+  dockerCreds           = var.dockerCreds
+  kafka_def_req_cpu     = var.kafka_def_req_cpu
+  kafka_def_req_mem     = var.kafka_def_req_mem
+  kafka_def_lim_cpu     = var.kafka_def_lim_cpu
+  kafka_def_lim_mem     = var.kafka_def_lim_mem
+  cont_def_req_cpu      = var.cont_def_req_cpu
+  cont_def_req_mem      = var.cont_def_req_mem
+  cont_def_lim_cpu      = var.cont_def_lim_cpu
+  cont_def_lim_mem      = var.cont_def_lim_mem
+  depends_on            = [module.eks, module.postgres_chart, module.kafka_chart]
 }

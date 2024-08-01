@@ -4,7 +4,7 @@ resource "random_string" "password" {
 }
 
 resource "helm_release" "postgresql" {
-  depends_on = [module.eks]
+  depends_on = [var.eks_cluster_name]
   name       = "webapp-postgresql"
   version    = "15.5.6"
   repository = "https://charts.bitnami.com/bitnami"
@@ -14,7 +14,7 @@ resource "helm_release" "postgresql" {
   create_namespace = true
   namespace        = "cve-consumer"
 
-  values = ["${file("postgres-values.yaml")}"]
+  values = ["${file("./postgres/postgres-values.yaml")}"]
 
   set {
     name  = "auth.username"

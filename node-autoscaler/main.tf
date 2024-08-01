@@ -17,12 +17,12 @@ resource "aws_iam_role" "autoscaler_role" {
       {
         Effect = "Allow",
         Principal = {
-          Federated = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${module.eks.oidc_provider}"
+          Federated = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${var.eks_oidc_provider}"
         },
         Action = "sts:AssumeRoleWithWebIdentity",
         Condition = {
           StringEquals = {
-          "${module.eks.oidc_provider}:sub" = "system:serviceaccount:autoscaler-ns:eks-autoscaler-aws-cluster-autoscaler" }
+          "${var.eks_oidc_provider}:sub" = "system:serviceaccount:autoscaler-ns:eks-autoscaler-aws-cluster-autoscaler" }
         }
       }
     ]
@@ -66,7 +66,7 @@ resource "aws_iam_role_policy_attachment" "auto_scaler_policy_attachment" {
 }
 
 resource "helm_release" "eks-autoscaler" {
-  depends_on = [module.eks]
+  depends_on = [var.eks_cluster_name]
 
   name       = "eks-autoscaler"
   repository = "git+https://github.com/csye7125-su24-team08/helm-eks-autoscaler.git"
@@ -74,7 +74,6 @@ resource "helm_release" "eks-autoscaler" {
   version    = "0.1.0"               # Specify the version of the Helm chart
 
   repository_username = "dongrep"
-  repository_password = var.github_token
 
   create_namespace = true
   namespace        = "autoscaler-ns"
@@ -86,7 +85,7 @@ resource "helm_release" "eks-autoscaler" {
 
   set {
     name  = "cluster-autoscaler.autoDiscovery.clusterName"
-    value = module.eks.cluster_name
+    value = var.eks_cluster_name
   }
 
   set {

@@ -22,5 +22,6 @@ output "cluster_name" {
 }
 
 output "postgres_password" {
-  value = random_string.password.result
+  description = "value of the postgres password"
+  value       = module.postgres_chart.postgresPassword
 }
