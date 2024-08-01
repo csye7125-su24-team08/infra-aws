@@ -10,14 +10,14 @@ listeners:
 
 controller:
   replicaCount: 0
-  
+
 broker:
   configOverrides:
     server:
       properties:
-        message.max.bytes: 2024000   
-        replica.fetch.max.bytes: 2024000 
-  replicaCount: 3 
+        message.max.bytes: 2024000
+        replica.fetch.max.bytes: 2024000
+  replicaCount: 3
   persistence:
     size: 20Gi
     storageClass: "gp2"
@@ -51,3 +51,22 @@ zookeeper:
 extraEnvVars:
   - name: KAFKA_ENABLE_KRAFT
     value: "false"
+
+metrics:
+  jmx:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+    labels:
+      release: prometheus
+
+  resources:
+    limits:
+      memory: "128Mi"
+      cpu: "100m"
+    requests:
+      memory: "256Mi"
+      cpu: "200m"

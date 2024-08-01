@@ -1,0 +1,3 @@
+variable "serviceMonitoringNamespace" {
+  type = string
+}
