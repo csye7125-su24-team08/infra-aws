@@ -1,7 +1,5 @@
 resource "helm_release" "kafka" {
-  depends_on = [var.eks_cluster_name]
-
-  repository = "https://charts.bitnami.com/bitnami"
+  repository = "oci://registry-1.docker.io/bitnamicharts/"
   chart      = "kafka"
   version    = "29.3.4"
   name       = "webapp-kafka"

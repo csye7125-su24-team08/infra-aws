@@ -30,4 +30,9 @@ resource "helm_release" "postgresql" {
     name  = "auth.postgresPassword"
     value = random_string.password.result
   }
+
+  set {
+    name  = "metrics.prometheusRule.namespace"
+    value = var.serviceMonitorNamespace
+  }
 }

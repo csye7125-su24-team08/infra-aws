@@ -13,3 +13,7 @@ variable "postgresUser" {
 variable "eks_instance_role_arn" {
   type = string
 }
+
+variable "serviceMonitorNamespace" {
+  type = string
+}

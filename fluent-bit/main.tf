@@ -59,11 +59,10 @@ resource "aws_iam_role_policy_attachment" "logger_policy_attachment" {
 
 
 resource "helm_release" "fluent-bit" {
-  depends_on = [var.eks_cluster_name]
 
-  repository = "https://fluent.github.io/helm-charts"
+  repository = "oci://registry-1.docker.io/bitnamicharts/"
   chart      = "fluent-bit"
-  version    = "0.47.5"
+  version    = "2.3.15"
   name       = "fluent-bit"
 
   create_namespace = true
