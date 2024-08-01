@@ -1,0 +1,46 @@
+config:
+  service: |
+    [SERVICE]
+        Daemon Off
+        Flush {{ .Values.flush | default 5 }}
+        Log_Level {{ .Values.logLevel | default "info" }}
+        Parsers_File /fluent-bit/etc/parsers.conf
+        Parsers_File /fluent-bit/etc/conf/custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port {{ .Values.metricsPort | default 2020 }}
+        Health_Check On
+
+  ## https://docs.fluentbit.io/manual/pipeline/inputs
+  inputs: |
+    [INPUT]
+        Name tail
+        Path /var/log/containers/*.log
+        multiline.parser docker, cri
+        Tag kube.*
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+
+  ## https://docs.fluentbit.io/manual/pipeline/filters
+  filters: |
+    [FILTER]
+        Name kubernetes
+        Match kube.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+
+  parser: |
+    [PARSER]
+        Name json
+        Format json
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S
+
+  ## https://docs.fluentbit.io/manual/pipeline/outputs
+  outputs: |
+    [OUTPUT]
+        Name stdout
+        Match *
+        Format json_lines

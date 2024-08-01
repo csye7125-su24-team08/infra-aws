@@ -8,8 +8,6 @@ resource "kubernetes_namespace" "cve-operator" {
     }
     name = "cve-operator"
   }
-
-  depends_on = [module.eks]
 }
 
 resource "kubernetes_limit_range" "kafka_ns_limit_range" {
@@ -30,8 +28,6 @@ resource "kubernetes_limit_range" "kafka_ns_limit_range" {
       }
     }
   }
-
-  depends_on = [helm_release.kafka]
 }
 
 resource "kubernetes_namespace" "cve_processor_ns" {
@@ -44,8 +40,6 @@ resource "kubernetes_namespace" "cve_processor_ns" {
     }
     name = "cve-processor"
   }
-
-  depends_on = [helm_release.kafka]
 }
 
 resource "kubernetes_limit_range" "cve_processor_limit_range" {
@@ -88,6 +82,4 @@ resource "kubernetes_limit_range" "cve_consumer_limit_range" {
       }
     }
   }
-
-  depends_on = [helm_release.postgresql]
 }

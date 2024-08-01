@@ -73,11 +73,6 @@ variable "postgresUser" {
   default = "piyush"
 }
 
-variable "autoscaler_repo" {
-  type    = string
-  default = "../helm-eks-autoscaler"
-}
-
 variable "kafka_def_req_cpu" {
   type    = string
   default = "300m"
@@ -118,9 +113,12 @@ variable "cont_def_lim_mem" {
   default = "300Mi"
 }
 
-variable "github_token" {
-  type        = string
-  description = "GitHub Personal Access Token"
-  sensitive   = true
-  default     = "use-gh-pat-token"
+variable "dockerCreds" {
+  type    = string
+  default = "eyJhdXRocyI6eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsidXNlcm5hbWUiOiJkb25ncmVwIiwicGFzc3dvcmQiOiJkY2tyX3BhdF83THFJSjcxSWpZVXNyMTJkRXhZdk12dU9aeXMiLCJhdXRoIjoiWkc5dVozSmxjRHBrWTJ0eVgzQmhkRjgzVEhGSlNqY3hTV3BaVlhOeU1USmtSWGhaZGsxMmRVOWFlWE09In19fQ=="
+}
+
+variable "serviceMonitorNamespace" {
+  type    = string
+  default = "monitoring"
 }

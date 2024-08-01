@@ -60,6 +60,10 @@ module "eks" {
     coredns = {
       most_recent = true
     }
+    amazon-cloudwatch-observability = {
+      most_recent              = true
+      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+    }
   }
 
   cluster_enabled_log_types = ["scheduler", "controllerManager", "api", "audit", "authenticator"]
@@ -124,8 +128,37 @@ resource "aws_iam_role" "eks_instance_role" {
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   ]
-
 }
+
+data "aws_iam_policy_document" "logging_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:CreateLogGroup",
+      "logs:PutLogEvents"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "logging_policy" {
+  name        = "logger-policy"
+  description = "Policy for auto-scaler"
+  policy      = data.aws_iam_policy_document.logging_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "logging_policy_attachment" {
+  role       = aws_iam_role.eks_instance_role.name
+  policy_arn = aws_iam_policy.logging_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "logging_policy_attachment_node_role" {
+  role       = module.eks.cluster_iam_role_name
+  policy_arn = aws_iam_policy.logging_policy.arn
+}
+
+
 
 # https://aws.amazon.com/blogs/containers/amazon-ebs-csi-driver-is-now-generally-available-in-amazon-eks-add-ons/ 
 data "aws_iam_policy" "ebs_csi_policy" {
