@@ -1,81 +1,62 @@
-resource "kubernetes_namespace" "istio-system" {
-  metadata {
-    annotations = {
-      name = "istio-system"
-    }
-    labels = {
-      name = "istio-system"
-    }
-    name = "istio-system"
+resource "helm_release" "istio_base" {
+  name = "istio-base"
+
+  repository       = "https://istio-release.storage.googleapis.com/charts"
+  chart            = "base"
+  namespace        = "istio-system"
+  create_namespace = true
+  version          = "1.22.3"
+
+  set {
+    name  = "global.istioNamespace"
+    value = "istio-system"
   }
 }
-
-resource "helm_release" "istio_base" {
-  name       = "istio-base"
-  version    = "1.22.3"
-  repository = "https://istio-release.storage.googleapis.com/charts"
-  chart      = "base"
-
-  namespace  = "istio-system"
-
-  depends_on = [ kubernetes_namespace.istio-system ]
-}
-
-# resource "helm_release" "istio-cni" {
-#   name       = "istio-cni"
-#   version    = "1.22.3"
-#   repository = "https://istio-release.storage.googleapis.com/charts"
-#   chart      = "cni"
-
-#   namespace  = "istio-system"
-
-#   depends_on = [ kubernetes_namespace.istio-system, helm_release.istio_base ]
-# }
 
 
 resource "helm_release" "istiod" {
-  name       = "istiod"
-  version    = "1.22.3"
-  repository = "https://istio-release.storage.googleapis.com/charts"
-  chart      = "istiod"
+  name = "istiod-release"
 
-  namespace  = "istio-system"
+  repository       = "https://istio-release.storage.googleapis.com/charts"
+  chart            = "istiod"
+  namespace        = "istio-system"
+  create_namespace = true
+  version          = "1.22.3"
 
-   set {
-    name  = "values.global.istioNamespace"
-    value = "istio-system"
-  }
-
-   set {
-    name  = "pilot.cni.enabled"
+  set {
+    name  = "telemetry.enabled"
     value = "true"
   }
 
-  values = ["${file("./istio/istio-values.yaml")}"]
-  depends_on = [ kubernetes_namespace.istio-system, helm_release.istio_base]
+  set {
+    name  = "global.istioNamespace"
+    value = "istio-system"
+  }
+
+  set {
+    name  = "meshConfig.ingressService"
+    value = "istio-gateway"
+  }
+
+  set {
+    name  = "meshConfig.ingressSelector"
+    value = "gateway"
+  }
+
+  depends_on = [helm_release.istio_base]
 }
 
-# resource "kubernetes_namespace" "istio-ingress" {
-#   metadata {
-#     annotations = {
-#       name = "istio-ingress"
-#     }
-#     labels = {
-#       name = "istio-ingress"
-#       istio-injection = "enabled"
-#     }
-#     name = "istio-ingress"
-#   }
-# }
+resource "helm_release" "gateway" {
+  name = "gateway"
 
-# resource "helm_release" "istio-ingressgateway" {
-#   name       = "istio-ingressgateway"
-#   repository = "https://istio-release.storage.googleapis.com/charts"
-#   chart      = "gateway"
+  repository       = "https://istio-release.storage.googleapis.com/charts"
+  chart            = "gateway"
+  namespace        = "istio-ingress"
+  create_namespace = true
+  version          = "1.22.3"
 
-
-#   create_namespace = true
-#   namespace        = "istio-ingress"
-
-#   depends_on = [ helm_release.istio_base ]
-# }
+  depends_on = [
+    helm_release.istio_base,
+    helm_release.istiod
+  ]
+}

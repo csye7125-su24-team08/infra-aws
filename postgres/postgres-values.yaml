@@ -1,11 +1,12 @@
-enabled: true
-image:
-  tag: 15.5.0-debian-11-r5
 auth:
   enablePostgresUser: true
   database: cve
 primary:
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
   persistence:
+    annotations:
+      sidecar.istio.io/inject: "false"
     storageClass: "gp2"
     size: 10Gi
   labels:

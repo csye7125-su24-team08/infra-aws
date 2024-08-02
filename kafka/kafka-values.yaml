@@ -38,6 +38,8 @@ provisioning:
   replicationFactor: 3
   topics:
     - name: cve
+  extraProvisioningCommands: 
+    - curl -fsI -X POST http://localhost:15020/quitquitquit
 
 kraft:
   enabled: false
@@ -70,3 +72,9 @@ metrics:
     requests:
       memory: "256Mi"
       cpu: "200m"
+
+log4j:
+  appenders: |
+    log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+    log4j.appender.CONSOLE.layout=org.apache.log4j.json.JSONEventLayoutV1
+  rootLogger: "INFO, CONSOLE"
