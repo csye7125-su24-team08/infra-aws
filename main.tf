@@ -33,7 +33,7 @@ module "postgres_chart" {
   eks_cluster_name        = module.eks.cluster_name
   eks_instance_role_arn   = aws_iam_role.eks_instance_role.arn
   serviceMonitorNamespace = var.serviceMonitorNamespace
-  depends_on              = [module.eks, module.prometheus_chart, module.fluent-bit_chart, module.istio_chart]
+  depends_on              = [module.eks, module.prometheus_chart, module.istio_chart]
 }
 
 module "kafka_chart" {

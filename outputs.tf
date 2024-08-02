@@ -21,6 +21,11 @@ output "cluster_name" {
   value       = module.eks.cluster_name
 }
 
+output "eks_kubectl_connect" {
+  description = "Command to connect to the EKS cluster"
+  value       = "aws eks --region ${var.region} update-kubeconfig --name ${module.eks.cluster_name} --profile profile-name"
+}
+
 output "postgres_password" {
   description = "value of the postgres password"
   value       = module.postgres_chart.postgresPassword

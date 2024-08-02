@@ -48,7 +48,7 @@ module "eks" {
       service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
     }
     eks-pod-identity-agent = {
-      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+      most_recent = true
     }
     vpc-cni = {
       most_recent          = true
@@ -61,8 +61,7 @@ module "eks" {
       most_recent = true
     }
     amazon-cloudwatch-observability = {
-      most_recent              = true
-      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+      most_recent = true
     }
   }
 
@@ -91,6 +90,37 @@ module "eks" {
       }
     }
   }
+  node_security_group_additional_rules = {
+    ingress_15017 = {
+      description                   = "Cluster API - Istio Webhook namespace.sidecar-injector.istio.io"
+      protocol                      = "TCP"
+      from_port                     = 15017
+      to_port                       = 15017
+      type                          = "ingress"
+      source_cluster_security_group = true
+    }
+    ingress_15012 = {
+      description                   = "Cluster API to nodes ports/protocols"
+      protocol                      = "TCP"
+      from_port                     = 15012
+      to_port                       = 15012
+      type                          = "ingress"
+      source_cluster_security_group = true
+    }
+  }
+}
+
+module "eks_blueprints_addons" {
+  source  = "aws-ia/eks-blueprints-addons/aws"
+  version = "~> 1.0"
+
+  cluster_name      = module.eks.cluster_name
+  cluster_endpoint  = module.eks.cluster_endpoint
+  cluster_version   = module.eks.cluster_version
+  oidc_provider_arn = module.eks.oidc_provider_arn
+
+  # This is required to expose Istio Ingress Gateway
+  enable_aws_load_balancer_controller = true
 }
 
 data "aws_ami" "eks_worker" {
