@@ -69,7 +69,7 @@ resource "helm_release" "eks-autoscaler" {
   depends_on = [var.eks_cluster_name]
 
   name       = "eks-autoscaler"
-  repository = "git+https://github.com/csye7125-su24-team08/helm-eks-autoscaler.git"
+  repository = "git+ssh://git@github.com/csye7125-su24-team08/helm-eks-autoscaler.git"
   chart      = "helm-eks-autoscaler" # Relative path to the chart directory in the repo
   version    = "0.1.0"               # Specify the version of the Helm chart
 

@@ -5,6 +5,7 @@ resource "kubernetes_namespace" "cve-operator" {
     }
     labels = {
       name = "cve-operator"
+      istio-injection = "enabled"
     }
     name = "cve-operator"
   }
@@ -37,6 +38,7 @@ resource "kubernetes_namespace" "cve_processor_ns" {
     }
     labels = {
       name = "cve-processor"
+      istio-injection = "enabled"
     }
     name = "cve-processor"
   }

@@ -3,15 +3,27 @@ resource "random_string" "password" {
   special = false
 }
 
+resource "kubernetes_namespace" "cve-consumer" {
+  metadata {
+    annotations = {
+      name = "cve-consumer"
+    }
+    labels = {
+      name = "cve-consumer"
+      istio-injection = "enabled"
+    }
+    name = "cve-consumer"
+  }
+}
+
 resource "helm_release" "postgresql" {
-  depends_on = [var.eks_cluster_name]
+  depends_on = [var.eks_cluster_name, kubernetes_namespace.cve-consumer]
   name       = "webapp-postgresql"
   version    = "15.5.6"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "postgresql"
 
-
-  create_namespace = true
+  # create_namespace = true
   namespace        = "cve-consumer"
 
   values = ["${file("./postgres/postgres-values.yaml")}"]
