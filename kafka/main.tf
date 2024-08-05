@@ -28,9 +28,14 @@ resource "helm_release" "kafka" {
     value = "3"
   }
 
-  set {
-    name  = "metrics.serviceMonitor.namespace"
-    value = var.serviceMonitoringNamespace
-  }
+}
 
+resource "helm_release" "kafka-exportor" {
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "prometheus-kafka-exporter"
+  name       = "prometheus-kafka-exporter"
+
+  namespace = "kafka-ns"
+
+  values = ["${file("./kafka/kafka-exporter-values.yaml")}"]
 }

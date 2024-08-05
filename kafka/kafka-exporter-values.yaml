@@ -1,0 +1,9 @@
+prometheus:
+  serviceMonitor:
+    enabled: true
+    additionalLabels: { release: prometheus }
+
+kafkaServer:
+  - webapp-kafka.kafka-ns.svc.cluster.local:9092
+
+annotations: { sidecar.istio.io/inject: "false" }

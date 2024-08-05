@@ -66,3 +66,11 @@ volumeMounts:
 
 daemonset:
   enabled: true
+
+resources:
+  limits:
+    memory: "30m"
+    cpu: "10m"
+  requests:
+    memory: "10m"
+    cpu: "5m"

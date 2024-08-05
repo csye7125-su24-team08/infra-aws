@@ -1,5 +1,5 @@
 locals {
-  cluster_name = "infra-eks-${random_string.suffix.result}"
+  cluster_name = var.cluster_name
 }
 
 resource "random_string" "suffix" {
@@ -60,9 +60,9 @@ module "eks" {
     coredns = {
       most_recent = true
     }
-    amazon-cloudwatch-observability = {
-      most_recent = true
-    }
+    # amazon-cloudwatch-observability = {
+    #   most_recent = true
+    # }
   }
 
   cluster_enabled_log_types = ["scheduler", "controllerManager", "api", "audit", "authenticator"]
