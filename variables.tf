@@ -8,6 +8,11 @@ variable "profile" {
   default = "dev"
 }
 
+variable "cluster_name" {
+  type    = string
+  default = "infra-eks-7v63J1C7"
+}
+
 variable "vpc_cidr" {
   type    = string
   default = "10.0.0.0/16"

@@ -11,6 +11,11 @@ resource "helm_release" "istio_base" {
     name  = "global.istioNamespace"
     value = "istio-system"
   }
+
+  set {
+    name  = "defaultRevision"
+    value = "default"
+  }
 }
 
 
@@ -54,6 +59,8 @@ resource "helm_release" "gateway" {
   namespace        = "istio-ingress"
   create_namespace = true
   version          = "1.22.3"
+
+  values = [file("./istio/gateway-values.yaml")]
 
   depends_on = [
     helm_release.istio_base,

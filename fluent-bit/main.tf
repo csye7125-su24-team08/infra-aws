@@ -30,7 +30,7 @@ resource "aws_iam_role" "logger_role" {
 }
 
 resource "aws_iam_instance_profile" "logger_instance_profile" {
-  name = "eks-logger-instance-profile"
+  name = "eks-logger-profile"
   role = aws_iam_role.logger_role.name
 }
 

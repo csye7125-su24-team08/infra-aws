@@ -10,6 +10,7 @@ listeners:
 
 controller:
   replicaCount: 0
+  resourcesPreset: "small"
 
 broker:
   configOverrides:
@@ -21,13 +22,8 @@ broker:
   persistence:
     size: 20Gi
     storageClass: "gp2"
-  resources:
-    limits:
-      memory: "2Gi"
-      cpu: "1.5"
-    requests:
-      memory: "1Gi"
-      cpu: "0.5"
+  resourcesPreset: "medium"
+      
 
 serviceAccount:
   create: false
@@ -38,6 +34,8 @@ provisioning:
   replicationFactor: 3
   topics:
     - name: cve
+      partitions: 3
+      replicationFactor: 3
   extraProvisioningCommands: 
     - curl -fsI -X POST http://localhost:15020/quitquitquit
 
@@ -53,25 +51,6 @@ zookeeper:
 extraEnvVars:
   - name: KAFKA_ENABLE_KRAFT
     value: "false"
-
-metrics:
-  jmx:
-    enabled: true
-  serviceMonitor:
-    enabled: true
-    path: /metrics
-    interval: 30s
-    scrapeTimeout: 10s
-    labels:
-      release: prometheus
-
-  resources:
-    limits:
-      memory: "128Mi"
-      cpu: "100m"
-    requests:
-      memory: "256Mi"
-      cpu: "200m"
 
 log4j:
   appenders: |
