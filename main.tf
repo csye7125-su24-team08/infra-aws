@@ -1,6 +1,6 @@
 module "metrics_chart" {
   source     = "./metrics"
-  depends_on = [module.eks]
+  depends_on = [module.eks, module.eks_blueprints_addons]
 }
 
 module "node-autoscaler_chart" {
@@ -8,12 +8,12 @@ module "node-autoscaler_chart" {
   region            = var.region
   eks_cluster_name  = module.eks.cluster_name
   eks_oidc_provider = module.eks.oidc_provider
-  depends_on        = [module.eks]
+  depends_on        = [module.eks, module.eks_blueprints_addons]
 }
 
 module "istio_chart" {
   source     = "./istio"
-  depends_on = [module.eks]
+  depends_on = [module.eks, module.eks_blueprints_addons]
 }
 
 module "prometheus_chart" {
