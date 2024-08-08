@@ -69,8 +69,8 @@ daemonset:
 
 resources:
   limits:
-    memory: "30m"
-    cpu: "10m"
+    cpu: 100m
+    memory: 128Mi
   requests:
-    memory: "10m"
-    cpu: "5m"
+    cpu: 100m
+    memory: 128Mi

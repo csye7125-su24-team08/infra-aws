@@ -117,6 +117,8 @@ module "eks_blueprints_addons" {
 
   # This is required to expose Istio Ingress Gateway
   enable_aws_load_balancer_controller = true
+
+  depends_on = [module.eks]
 }
 
 data "aws_ami" "eks_worker" {
