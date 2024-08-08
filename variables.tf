@@ -10,7 +10,7 @@ variable "profile" {
 
 variable "cluster_name" {
   type    = string
-  default = "infra-eks-7v63J1C7"
+  default = "infra-eks-cluster"
 }
 
 variable "vpc_cidr" {

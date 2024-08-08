@@ -23,7 +23,15 @@ broker:
     size: 20Gi
     storageClass: "gp2"
   resourcesPreset: "medium"
-      
+  autoscaling:
+    hpa:
+      enabled: true
+      targetCPU: "90"
+      minReplicas: "3"
+      maxReplicas: "4"
+  pdb:
+    create: true
+    minAvailable: "3"
 
 serviceAccount:
   create: false

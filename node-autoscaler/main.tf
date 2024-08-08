@@ -73,7 +73,7 @@ resource "helm_release" "eks-autoscaler" {
   chart      = "helm-eks-autoscaler" # Relative path to the chart directory in the repo
   version    = "0.1.0"               # Specify the version of the Helm chart
 
-  repository_username = "dongrep"
+  repository_username = "local-man"
 
   create_namespace = true
   namespace        = "autoscaler-ns"

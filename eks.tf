@@ -1,14 +1,10 @@
-locals {
-  cluster_name = var.cluster_name
-}
-
 resource "random_string" "suffix" {
   length  = 8
   special = false
 }
 
 resource "aws_launch_template" "my_launch_template" {
-  name_prefix   = "${local.cluster_name}-lt"
+  name_prefix   = "${var.cluster_name}-lt"
   image_id      = data.aws_ami.eks_worker.id
   instance_type = "c3.large"
 
@@ -37,7 +33,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "20.8.5"
 
-  cluster_name    = local.cluster_name
+  cluster_name    = var.cluster_name
   cluster_version = "1.30"
 
   cluster_endpoint_public_access           = true
@@ -135,12 +131,12 @@ data "aws_ami" "eks_worker" {
 }
 
 resource "aws_iam_instance_profile" "eks_instance_profile" {
-  name = "${local.cluster_name}-instance-profile"
+  name = "${var.cluster_name}-instance-profile"
   role = aws_iam_role.eks_instance_role.name
 }
 
 resource "aws_iam_role" "eks_instance_role" {
-  name = "${local.cluster_name}-instance-role"
+  name = "${var.cluster_name}-instance-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
