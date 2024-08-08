@@ -22,6 +22,9 @@ primary:
       cpu: "0.3"
   networkPolicy:
     enabled: false
+  pdb:
+    create: true
+    minAvailable: 1
 
 metrics:
   enabled: true

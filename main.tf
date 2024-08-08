@@ -1,3 +1,7 @@
+module "metrics_chart" {
+  source     = "./metrics"
+  depends_on = [module.eks]
+}
 
 module "node-autoscaler_chart" {
   source            = "./node-autoscaler"
