@@ -45,4 +45,20 @@ resource "helm_release" "postgresql" {
     name  = "metrics.prometheusRule.namespace"
     value = var.serviceMonitorNamespace
   }
+
+  set {
+    name  = "image.pullSecrets"
+    value = var.dockerCreds
+  }
+
+  set {
+    name  = "primary.initdb.scripts.create_vector_extension\\.sh" 
+    value = <<EOF
+  #!/bin/sh
+  echo "Creating cve schema if it doesn't exist..."
+  PGPASSWORD=${random_string.password.result} psql -U ${var.postgresUser} -d cve -c "CREATE SCHEMA IF NOT EXISTS cve;"
+  echo "Creating vector extension in the cve schema of the PostgreSQL database..."
+  PGPASSWORD=${random_string.password.result} psql -U postgres -d cve -c "CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA cve;"
+  EOF
+  }
 }

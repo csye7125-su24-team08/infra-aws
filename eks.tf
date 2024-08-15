@@ -74,7 +74,7 @@ module "eks" {
     one = {
       name = "node-group-1"
 
-      instance_types = ["c3.large"]
+      instance_types = ["c3.large", "c3.medium"]
 
       min_size     = var.eks_cluster_min_size
       max_size     = var.eks_cluster_max_size
@@ -117,6 +117,17 @@ module "eks_blueprints_addons" {
 
   # This is required to expose Istio Ingress Gateway
   enable_aws_load_balancer_controller = true
+
+  enable_external_dns = true
+  enable_cert_manager = true
+
+  cert_manager_route53_hosted_zone_arns = [
+    var.hosted_zone_arn 
+  ]
+
+  tags = {
+    Environment = "cert-manager"
+  }
 
   depends_on = [module.eks]
 }

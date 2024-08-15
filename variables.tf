@@ -127,3 +127,8 @@ variable "serviceMonitorNamespace" {
   type    = string
   default = "monitoring"
 }
+
+variable "hosted_zone_arn" {
+  type = string
+
+}

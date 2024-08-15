@@ -23,11 +23,6 @@ resource "helm_release" "kafka" {
 
   values = ["${file("./kafka/kafka-values.yaml")}"]
 
-  set {
-    name  = "replicaCount"
-    value = "3"
-  }
-
 }
 
 resource "helm_release" "kafka-exportor" {

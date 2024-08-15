@@ -17,3 +17,7 @@ variable "eks_instance_role_arn" {
 variable "serviceMonitorNamespace" {
   type = string
 }
+
+variable "dockerCreds" {
+  type = string
+}
