@@ -60,7 +60,7 @@ variable "PRIVATE_SUBNETS" {
 
 variable "eks_cluster_min_size" {
   type    = number
-  default = 3
+  default = 4
 }
 
 variable "eks_cluster_max_size" {
@@ -70,7 +70,7 @@ variable "eks_cluster_max_size" {
 
 variable "eks_cluster_desired_capacity" {
   type    = number
-  default = 3
+  default = 4
 }
 
 variable "postgresUser" {
@@ -123,12 +123,12 @@ variable "dockerCreds" {
   default = "eyJhdXRocyI6eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsidXNlcm5hbWUiOiJkb25ncmVwIiwicGFzc3dvcmQiOiJkY2tyX3BhdF83THFJSjcxSWpZVXNyMTJkRXhZdk12dU9aeXMiLCJhdXRoIjoiWkc5dVozSmxjRHBrWTJ0eVgzQmhkRjgzVEhGSlNqY3hTV3BaVlhOeU1USmtSWGhaZGsxMmRVOWFlWE09In19fQ=="
 }
 
+variable "openai_api_key" {
+  type    = string
+  default = "c2stcHJvai05X05rVnJjWV9KOC1ZMmh6RmZrM1E5b0pmYVFmcGdiZy1xLUkzbHdUUmd1alR4NVhjY0c1ZnZNMkpDVDNCbGJrRkpaMG5rbkhRU21tMW83NDFuUjhuVFhoSFI5MGlxZHNaNGFtSVUyWG9oV1pzTUgwalNyWlh5dERWbGtBCg=="
+}
+
 variable "serviceMonitorNamespace" {
   type    = string
   default = "monitoring"
-}
-
-variable "hosted_zone_arn" {
-  type = string
-
 }

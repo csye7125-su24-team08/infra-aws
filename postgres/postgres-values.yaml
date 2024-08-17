@@ -17,6 +17,7 @@ primary:
   persistence:
     annotations:
       sidecar.istio.io/inject: "false"
+    storageClass: "gp2"
     size: 10Gi
   labels:
     app: webapp-db

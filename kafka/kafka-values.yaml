@@ -19,8 +19,9 @@ broker:
         replica.fetch.max.bytes: 2024000
   replicaCount: 3
   persistence:
+    storageClass: "gp2"
     size: 20Gi
-  resourcesPreset: "medium"
+  resourcesPreset: "small"
   autoscaling:
     hpa:
       enabled: true
@@ -49,6 +50,7 @@ kraft:
 zookeeper:
   enabled: true
   persistence:
+    storageClass: "gp2"
     size: 2Gi
 
 extraEnvVars:

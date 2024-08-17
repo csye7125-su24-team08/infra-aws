@@ -15,6 +15,14 @@ resource "kubernetes_namespace" "psql-ns" {
   }
 }
 
+# resource "helm_release" "pg-secrets" {
+#   name  = "pg-secrets"
+#   chart = "./secrets/secrets"
+
+#   namespace = kubernetes_namespace.psql-ns.metadata.0.name
+# }
+
+
 resource "helm_release" "postgresql" {
   depends_on = [kubernetes_namespace.psql-ns]
   name       = "webapp-postgresql"
@@ -47,12 +55,7 @@ resource "helm_release" "postgresql" {
   }
 
   set {
-    name  = "image.pullSecrets"
-    value = var.dockerCreds
-  }
-
-  set {
-    name  = "primary.initdb.scripts.create_vector_extension\\.sh" 
+    name  = "primary.initdb.scripts.create_vector_extension\\.sh"
     value = <<EOF
   #!/bin/sh
   echo "Creating cve schema if it doesn't exist..."

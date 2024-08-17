@@ -1,0 +1,15 @@
+name: ollama
+
+namespace: ollama
+
+image:
+  repository: ollama/ollama
+  tag: latest
+
+resources:
+  requests:
+    memory: "4Gi"
+    cpu: "2"
+  limits:
+    memory: "6Gi"
+    cpu: "4"

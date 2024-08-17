@@ -56,9 +56,9 @@ module "eks" {
     coredns = {
       most_recent = true
     }
-    # amazon-cloudwatch-observability = {
-    #   most_recent = true
-    # }
+    amazon-cloudwatch-observability = {
+      most_recent = true
+    }
   }
 
   cluster_enabled_log_types = ["scheduler", "controllerManager", "api", "audit", "authenticator"]
@@ -71,15 +71,21 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
+    # iam_role_additional_policies = {
+    #   AmazonRoute53ReadOnlyAccess = {
+    #     policy_arn = "arn:aws:iam::aws:policy/AmazonRoute53ReadOnlyAccess"
+    #   }
+    # }
     one = {
-      name = "node-group-1"
+      name                     = "node-group-1"
+      iam_role_use_name_prefix = false
+      iam_role_name            = "node-group-role"
 
-      instance_types = ["c3.large", "c3.medium"]
+      instance_types = ["c7a.xlarge", "c3.large"]
 
       min_size     = var.eks_cluster_min_size
       max_size     = var.eks_cluster_max_size
-      desired_size = var.eks_cluster_desired_capacity
-
+      desired_size = 5
       launch_template = {
         id      = aws_launch_template.my_launch_template.id
         version = "$Latest"
@@ -106,6 +112,10 @@ module "eks" {
   }
 }
 
+data "aws_route53_zone" "hosted_zone" {
+  name = "dev.clustering.ninja."
+}
+
 module "eks_blueprints_addons" {
   source  = "aws-ia/eks-blueprints-addons/aws"
   version = "~> 1.0"
@@ -118,15 +128,16 @@ module "eks_blueprints_addons" {
   # This is required to expose Istio Ingress Gateway
   enable_aws_load_balancer_controller = true
 
-  enable_external_dns = true
-  enable_cert_manager = true
+  enable_external_dns   = true
+  enable_karpenter      = true
+  enable_metrics_server = true
 
   cert_manager_route53_hosted_zone_arns = [
-    var.hosted_zone_arn 
+    data.aws_route53_zone.hosted_zone.arn
   ]
 
   tags = {
-    Environment = "cert-manager"
+    Environment = "dev"
   }
 
   depends_on = [module.eks]
@@ -165,7 +176,8 @@ resource "aws_iam_role" "eks_instance_role" {
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/AmazonRoute53ReadOnlyAccess"
   ]
 }
 
