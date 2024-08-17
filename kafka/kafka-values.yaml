@@ -10,7 +10,6 @@ listeners:
 
 controller:
   replicaCount: 0
-  resourcesPreset: "small"
 
 broker:
   configOverrides:
@@ -20,9 +19,9 @@ broker:
         replica.fetch.max.bytes: 2024000
   replicaCount: 3
   persistence:
-    size: 20Gi
     storageClass: "gp2"
-  resourcesPreset: "medium"
+    size: 20Gi
+  resourcesPreset: "small"
   autoscaling:
     hpa:
       enabled: true
@@ -40,7 +39,7 @@ provisioning:
   enabled: true
   topics:
     - name: cve
-      partitions: 12 
+      partitions: 10 
       replicationFactor: 3
   extraProvisioningCommands: 
     - curl -fsI -X POST http://localhost:15020/quitquitquit

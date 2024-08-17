@@ -1,3 +1,16 @@
-defaults:
+pilot:
+  enabled: true
+  replicas: 3
+  # Add more configuration options here
+default:
   global:
+    proxy:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 2000m
+          memory: 2048Mi
+      # Add more configuration options here
     logAsJson: true

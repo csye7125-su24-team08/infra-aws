@@ -1,7 +1,17 @@
 auth:
   enablePostgresUser: true
   database: cve
+
+image:
+  registry: docker.io
+  repository: dongrep/pgvector-postgresql
+  tag: latest
+  pullPolicy: IfNotPresent
+  pullSecrets:
+    - name: dockercred
+
 primary:
+  
   podAnnotations:
     sidecar.istio.io/inject: "false"
   persistence:

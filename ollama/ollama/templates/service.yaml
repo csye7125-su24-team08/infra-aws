@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  app.kubernetes.io/managed-by: Helm
+  meta.helm.sh/release-name: {{ .Release.Name }}
+spec:
+  type: ClusterIP
+  selector:
+    name: ollama
+  ports:
+  - port: 80
+    name: http
+    targetPort: http
+    protocol: TCP

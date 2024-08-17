@@ -1,14 +1,11 @@
-module "metrics_chart" {
-  source     = "./metrics"
+module "ollama" {
+  source     = "./ollama"
   depends_on = [module.eks, module.eks_blueprints_addons]
 }
 
-module "node-autoscaler_chart" {
-  source            = "./node-autoscaler"
-  region            = var.region
-  eks_cluster_name  = module.eks.cluster_name
-  eks_oidc_provider = module.eks.oidc_provider
-  depends_on        = [module.eks, module.eks_blueprints_addons]
+module "cert-manager" {
+  source     = "./cert-manager"
+  depends_on = [module.eks]
 }
 
 module "istio_chart" {
@@ -22,14 +19,6 @@ module "prometheus_chart" {
   depends_on                 = [module.eks, module.istio_chart]
 }
 
-module "fluent-bit_chart" {
-  source            = "./fluent-bit"
-  region            = var.region
-  eks_cluster_name  = module.eks.cluster_name
-  eks_oidc_provider = module.eks.oidc_provider
-  depends_on        = [module.eks, module.istio_chart]
-}
-
 module "postgres_chart" {
   source                  = "./postgres"
   postgresUser            = var.postgresUser
@@ -37,31 +26,46 @@ module "postgres_chart" {
   eks_cluster_name        = module.eks.cluster_name
   eks_instance_role_arn   = aws_iam_role.eks_instance_role.arn
   serviceMonitorNamespace = var.serviceMonitorNamespace
-  depends_on              = [module.eks, module.prometheus_chart, module.istio_chart]
+  dockerCreds             = var.dockerCreds
+  depends_on              = [module.eks, module.prometheus_chart]
+}
+
+
+module "cve-rag-stack" {
+  source           = "./cve-rag-stack"
+  eks_cluster_name = module.eks.cluster_name
+  dockerCreds      = var.dockerCreds
+  postgresUser     = var.postgresUser
+  postgresPassword = module.postgres_chart.postgresPassword
+  openai_api_key   = var.openai_api_key
+  depends_on       = [module.eks, module.postgres_chart]
 }
 
 module "kafka_chart" {
   source                     = "./kafka"
   eks_cluster_name           = module.eks.cluster_name
   serviceMonitoringNamespace = var.serviceMonitorNamespace
-  depends_on                 = [module.eks, module.prometheus_chart, module.fluent-bit_chart, module.istio_chart]
+  depends_on                 = [module.eks, module.prometheus_chart]
 }
 
 module "cve-consumer_chart" {
   source           = "./cve-consumer"
   eks_cluster_name = module.eks.cluster_name
   dockerCreds      = var.dockerCreds
+  openai_api_key   = var.openai_api_key
   postgresPassword = module.postgres_chart.postgresPassword
   postgresUser     = var.postgresUser
-  depends_on       = [module.eks, module.kafka_chart, module.postgres_chart, module.prometheus_chart, module.fluent-bit_chart, module.istio_chart]
+  depends_on       = [module.eks, module.kafka_chart, module.postgres_chart, ]
 }
 
 module "cve-operator_chart" {
   source           = "./cve-operator"
   eks_cluster_name = module.eks.cluster_name
   dockerCreds      = var.dockerCreds
-  depends_on       = [module.eks, module.postgres_chart, module.kafka_chart, module.prometheus_chart, module.fluent-bit_chart, module.cve-consumer_chart, module.istio_chart]
+  depends_on       = [module.eks, module.cve-consumer_chart]
 }
+
+
 
 module "namespace-config" {
   source                = "./namespace-config"
