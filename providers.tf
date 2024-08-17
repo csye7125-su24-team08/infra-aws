@@ -42,7 +42,7 @@ data "aws_eks_cluster_auth" "cluster" {
   depends_on = [data.aws_eks_cluster.cluster]
 }
 
-provider "kubernetes" { 
+provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
